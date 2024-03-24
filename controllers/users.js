@@ -7,7 +7,7 @@ const {
 
 const getUsers = (req, res) => {
   User.find({})
-    .orFail()
+    // .orFail()
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.log(err);

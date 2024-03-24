@@ -85,7 +85,7 @@ const addLike = (req, res) => {
     });
 };
 
-const deleteLikes = (req, res) => {
+const deleteLike = (req, res) => {
   ClothingItems.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -112,5 +112,5 @@ module.exports = {
   createItem,
   deleteItem,
   addLike,
-  deleteLikes,
+  deleteLike,
 };
