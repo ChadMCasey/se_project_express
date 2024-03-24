@@ -15,12 +15,12 @@ mongoose
 
 app.use((req, res, next) => {
   req.user = {
-    _id: "65fef9c327b014b918541e39",
+    _id: "65ff8920db6a3d0ff24ed64c",
   };
   next();
 });
 
 app.use(express.json()); // middleware to parse body
-app.use("/", mainRouter);
+app.use(mainRouter);
 
 app.listen(PORT);
