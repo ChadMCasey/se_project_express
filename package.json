@@ -1,5 +1,6 @@
 {
-  "name": "na",
+  "name": "WTWR Backend",
+  "author": "Chad Casey",
   "version": "1.0.0",
   "description": "The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.\r ## Running the Project\r `npm run start` — to launch the server",
   "main": "app.js",
@@ -8,7 +9,6 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "author": "Chad Casey",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.1",
