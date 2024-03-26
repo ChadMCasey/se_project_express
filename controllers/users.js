@@ -7,7 +7,6 @@ const {
 
 const getUsers = (req, res) => {
   User.find({})
-    .orFail()
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.log(err);
@@ -30,7 +29,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        res.status(INVALID_DATA).send({ message: err.message });
+        res.status(INVALID_DATA).send({ message: "Invalid data" });
       } else {
         res
           .status(SERVER_ERROR)
@@ -46,7 +45,7 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "CastError") {
-        res.status(INVALID_DATA).send({ message: err.message });
+        res.status(INVALID_DATA).send({ message: "Invalid data" });
       } else if (err.name === "DocumentNotFoundError") {
         res
           .status(INVALID_ENDPOINT)
