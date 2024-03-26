@@ -53,8 +53,6 @@ const deleteItem = (req, res) => {
         res
           .status(INVALID_ENDPOINT)
           .send({ message: "Requested resource not found" });
-      } else if (err.name === "CastError") {
-        res.status(INVALID_DATA).send({ message: "Invalid data" });
       } else {
         res
           .status(SERVER_ERROR)
