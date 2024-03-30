@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const BadRequest = require("../utils/badRequest");
+const InvalidData = require("../utils/invalidData");
 
 const User = new mongoose.Schema({
   name: {
@@ -52,15 +53,12 @@ User.statics.findUserByCredentials = function (email, password) {
         if (!matched) {
           return Promise.reject(new BadRequest("Incorrect email or password."));
         }
-        return user; // if we find a match then send back the user.
+        return user;
       });
     })
     .catch((err) => {
       if (!email || !password) {
-        const invalidData = new Error();
-        invalidData.status = 400;
-        invalidData.name = "InvalidData";
-        return Promise.reject(invalidData);
+        return Promise.reject(new InvalidData("Invalid Data"));
       }
       return Promise.reject(err);
     });

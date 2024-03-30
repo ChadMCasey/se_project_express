@@ -5,9 +5,9 @@ const { JWT_SECRET } = require("../utils/config");
 const BadRequest = require("../utils/badRequest");
 const {
   INVALID_DATA,
-  INVALID_ENDPOINT,
   SERVER_ERROR,
   CONFLICT_ERROR,
+  INVALID_ENDPOINT,
 } = require("../utils/errors");
 
 const getUsers = (req, res) => {
@@ -15,15 +15,9 @@ const getUsers = (req, res) => {
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.log(err);
-      if (err.name === "DocumentNotFoundError") {
-        res
-          .status(INVALID_ENDPOINT)
-          .send({ message: "Requested resource not found" });
-      } else {
-        res
-          .status(SERVER_ERROR)
-          .send({ message: "An error has occurred on the server." });
-      }
+      res
+        .status(SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -84,11 +78,13 @@ const loginUser = (req, res) => {
 const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
     .orFail()
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "CastError" || err.name === "DocumentNotFoundError") {
+      if (err.name === "CastError") {
         res.status(INVALID_DATA).send({ message: "Invalid data" });
+      } else if (err.name === "DocumentNotFoundError") {
+        res.status(INVALID_ENDPOINT).send({ messsage: err.message });
       } else {
         res
           .status(SERVER_ERROR)
@@ -106,12 +102,16 @@ const updateProfile = (req, res) => {
   )
     .orFail()
     .then((user) => {
-      res.status(200).send({ user });
+      res.send({ user });
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "DocumentNotFoundError" || err.name === "CastError") {
+      if (err.name === "CastError") {
         res.status(INVALID_DATA).send({ message: "Invalid Data" });
+      } else if (err.name === "DocumentNotFoundError") {
+        res.status(INVALID_ENDPOINT).send({ message: err.message });
+      } else if (err.name === "ValidationError") {
+        res.status(INVALID_DATA).send({ message: err.message });
       } else {
         res
           .status(SERVER_ERROR)

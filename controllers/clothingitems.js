@@ -5,22 +5,15 @@ const {
   SERVER_ERROR,
   FORBIDDEN_ERROR,
 } = require("../utils/errors");
-const ForbiddenError = require("../utils/forbidden");
 
 const getItems = (req, res) => {
   ClothingItems.find({})
-    .then((items) => res.status(200).send(items))
+    .then((items) => res.send(items))
     .catch((err) => {
       console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        res
-          .status(INVALID_ENDPOINT)
-          .send({ message: "Requested resource not found" });
-      } else {
-        res
-          .status(SERVER_ERROR)
-          .send({ message: "An error has occurred on the server." });
-      }
+      res
+        .status(SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -43,14 +36,17 @@ const createItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  const { itemId } = req.params;
-  ClothingItems.findByIdAndRemove(itemId)
+  ClothingItems.findById(req.params.itemId)
     .orFail()
     .then((item) => {
-      if (item.owner.toString() === req.user._id.toString()) {
-        return res.status(200).send(item);
+      if (item.owner.toString() !== req.user._id.toString()) {
+        return res
+          .status(FORBIDDEN_ERROR)
+          .send({ message: "You are unauthorized to delete this item." });
       }
-      return Promise.reject(new ForbiddenError());
+      return item
+        .deleteOne()
+        .then(() => res.send({ message: "Item successfully deleted." }));
     })
     .catch((err) => {
       console.error(err);
@@ -60,8 +56,6 @@ const deleteItem = (req, res) => {
         res
           .status(INVALID_ENDPOINT)
           .send({ message: "Requested resource not found" });
-      } else if (err instanceof ForbiddenError) {
-        res.status(FORBIDDEN_ERROR).send({ err: err.message });
       } else {
         res
           .status(SERVER_ERROR)
@@ -78,7 +72,7 @@ const addLike = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.status(200).send({ item });
+      res.send({ item });
     })
     .catch((err) => {
       console.error(err);
@@ -104,7 +98,7 @@ const deleteLike = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.status(200).send(item);
+      res.send(item);
     })
     .catch((err) => {
       console.error(err);
