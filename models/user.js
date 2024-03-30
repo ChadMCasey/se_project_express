@@ -55,13 +55,14 @@ User.statics.findUserByCredentials = function (email, password) {
         return user; // if we find a match then send back the user.
       });
     })
-    .catch(() => {
+    .catch((err) => {
       if (!email || !password) {
         const invalidData = new Error();
         invalidData.status = 400;
         invalidData.name = "InvalidData";
         return Promise.reject(invalidData);
       }
+      return err;
     });
 };
 

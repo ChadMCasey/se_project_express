@@ -1,16 +1,14 @@
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const BadRequest = require("../utils/badRequest.js");
+const BadRequest = require("../utils/badRequest");
 const {
   INVALID_DATA,
   INVALID_ENDPOINT,
   SERVER_ERROR,
-  UNAUTHORIZED,
   CONFLICT_ERROR,
 } = require("../utils/errors");
-const ForbiddenError = require("../utils/forbidden.js");
 
 const getUsers = (req, res) => {
   User.find({})
@@ -34,11 +32,11 @@ const createUser = (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
-    .then(({ name, avatar, email }) => {
+    .then((user) => {
       res.status(201).send({
-        name,
-        email,
-        avatar,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
       });
     })
     .catch((err) => {

@@ -1,9 +1,5 @@
 const router = require("express").Router();
-const {
-  createUser,
-  getCurrentUser,
-  updateProfile,
-} = require("../controllers/users");
+const { getCurrentUser, updateProfile } = require("../controllers/users");
 const { authorize } = require("../middleware/auth");
 
 router.use(authorize); // authorize all the following routes.
