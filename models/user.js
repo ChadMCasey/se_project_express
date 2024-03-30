@@ -62,7 +62,7 @@ User.statics.findUserByCredentials = function (email, password) {
         invalidData.name = "InvalidData";
         return Promise.reject(invalidData);
       }
-      return err;
+      return Promise.reject(err);
     });
 };
 
