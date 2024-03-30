@@ -3,7 +3,9 @@ const {
   INVALID_DATA,
   INVALID_ENDPOINT,
   SERVER_ERROR,
+  FORBIDDEN_ERROR,
 } = require("../utils/errors");
+const ForbiddenError = require("../utils/forbidden");
 
 const getItems = (req, res) => {
   ClothingItems.find({})
@@ -24,8 +26,7 @@ const getItems = (req, res) => {
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
-  const userId = req.user._id;
-  ClothingItems.create({ name, weather, imageUrl, owner: userId })
+  ClothingItems.create({ name, weather, imageUrl, owner: req.user._id })
     .then((user) => {
       res.status(201).send(user);
     })
@@ -45,14 +46,22 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
   ClothingItems.findByIdAndRemove(itemId)
     .orFail()
-    .then((item) => res.status(200).send(item))
+    .then((item) => {
+      if (item.owner.toString() === req.user._id.toString()) {
+        return res.status(200).send(item);
+      }
+      return Promise.reject(new ForbiddenError());
+    })
     .catch((err) => {
+      console.error(err);
       if (err.name === "CastError") {
         res.status(INVALID_DATA).send({ message: "Invalid data" });
       } else if (err.name === "DocumentNotFoundError") {
         res
           .status(INVALID_ENDPOINT)
           .send({ message: "Requested resource not found" });
+      } else if (err instanceof ForbiddenError) {
+        res.status(FORBIDDEN_ERROR).send({ err: err.message });
       } else {
         res
           .status(SERVER_ERROR)

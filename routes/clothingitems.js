@@ -1,4 +1,6 @@
 const itemRouter = require("express").Router();
+const { authorize } = require("../middleware/auth");
+
 const {
   getItems,
   createItem,
@@ -8,6 +10,9 @@ const {
 } = require("../controllers/clothingitems");
 
 itemRouter.get("/", getItems);
+
+itemRouter.use(authorize); // authorize all the following.
+
 itemRouter.post("/", createItem);
 itemRouter.delete("/:itemId", deleteItem);
 itemRouter.put("/:itemId/likes", addLike);
