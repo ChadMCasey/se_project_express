@@ -1,5 +1,5 @@
 const itemRouter = require("express").Router();
-const { authorize } = require("../middleware/auth");
+const { authorize } = require("../middlewares/auth");
 
 const {
   getItems,
