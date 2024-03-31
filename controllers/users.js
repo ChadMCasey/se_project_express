@@ -61,8 +61,8 @@ const loginUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err instanceof BadRequest || err.name === "TypeError") {
-        res.status(INVALID_DATA).send({ message: err.message });
+      if (err instanceof BadRequest) {
+        res.status(err.status).send({ message: err.message });
       } else if (err.name === "InvalidData") {
         res
           .status(err.status)
