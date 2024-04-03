@@ -50,14 +50,13 @@ const createUser = (req, res) => {
 };
 
 const loginUser = (req, res) => {
-  const { email, password } = req.body;
-  User.findUserByCredentials(email, password)
+  User.findUserByCredentials(req.body.email, req.body.password)
     .then((user) => {
-      console.log(user);
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.send({ token }); // send to browser
+      const { name, email, avatar, _id } = user;
+      res.send({ token, name, email, avatar, _id }); // send to browser
     })
     .catch((err) => {
       console.error(err);
@@ -102,7 +101,7 @@ const updateProfile = (req, res) => {
   )
     .orFail()
     .then((user) => {
-      res.send({ user });
+      res.send(user);
     })
     .catch((err) => {
       console.error(err);

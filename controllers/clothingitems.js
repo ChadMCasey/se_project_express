@@ -72,7 +72,7 @@ const addLike = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.send({ item });
+      res.send(item);
     })
     .catch((err) => {
       console.error(err);
