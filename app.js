@@ -2,20 +2,43 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const mainRouter = require("./routes/index");
-
+const centralizedError = require("./middlewares/centralizedError");
+const { errors } = require("celebrate");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 const app = express();
 
 const { PORT = 3001 } = process.env;
 
+// connecting to the database
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
   .then(() => {
-    console.log("Connected to WTWR DB");
+    console.log("Successfully Connected to WTWR DB...");
   })
-  .catch(console.error);
+  .catch((err) => {
+    console.error(`Connection to WTWR database error: ${err.message}`);
+  });
 
-app.use(express.json()); // middleware to parse body
+// express middleware to parse request
+app.use(express.json());
+
+// Cross-origin resource sharing (CORS)
 app.use(cors());
+
+// request logger before routes
+app.use(requestLogger);
+
+// route to our central router
 app.use(mainRouter);
 
+// error logger after routes
+app.use(errorLogger);
+
+// Joi Data Validation Error Handling
+app.use(errors());
+
+// Centralized error handling
+app.use(centralizedError);
+
+// launch application..
 app.listen(PORT);

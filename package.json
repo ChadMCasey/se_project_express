@@ -12,11 +12,14 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.3",
     "cors": "^2.8.5",
     "express": "^4.19.1",
+    "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.6.1",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

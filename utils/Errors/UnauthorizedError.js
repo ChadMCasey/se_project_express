@@ -1,4 +1,4 @@
-module.exports = class BadRequest extends Error {
+module.exports = class UnauthorizedError extends Error {
   constructor(message) {
     super(message);
     this.status = 401;
