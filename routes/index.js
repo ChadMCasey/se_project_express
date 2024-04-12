@@ -11,7 +11,7 @@ const {
 router.post("/signup", validateUserRegister, createUser);
 router.post("/signin", validateUserLogin, loginUser);
 
-// reroute to userRouter or itemRouter
+// rotue to userRouter or itemRouter
 router.use("/users", userRouter);
 router.use("/items", itemRouter);
 
