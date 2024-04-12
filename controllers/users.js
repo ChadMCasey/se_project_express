@@ -2,18 +2,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const UnauthorizedError = require("../utils/Errors/UnauthorizedError");
 const BadRequestError = require("../utils/Errors/BadRequestError");
 const ConflictError = require("../utils/Errors/ConflictError");
 const NotFoundError = require("../utils/Errors/NotFoundError");
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch(next);
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email } = req.body;
   bcrypt
     .hash(req.body.password, 10)
@@ -36,7 +35,7 @@ const createUser = (req, res) => {
     });
 };
 
-const loginUser = (req, res) => {
+const loginUser = (req, res, next) => {
   User.findUserByCredentials(req.body.email, req.body.password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -54,7 +53,7 @@ const loginUser = (req, res) => {
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => res.send(user))
@@ -69,7 +68,7 @@ const getCurrentUser = (req, res) => {
     });
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { avatar, name } = req.body;
   User.findByIdAndUpdate(
     req.user._id,

@@ -16,9 +16,8 @@ router.use("/users", userRouter);
 router.use("/items", itemRouter);
 
 // matching endpoint was not identifed
-router.use((req, res) => {
-  const err = new NotFoundError("The requested resource was not found.");
-  res.status(err.status).send({ message: err.message });
+router.use((req, res, next) => {
+  next(new NotFoundError("The requested resource was not found."));
 });
 
 module.exports = router;

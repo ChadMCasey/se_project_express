@@ -47,21 +47,26 @@ User.statics.findUserByCredentials = function (email, password) {
     .select("+password")
     .then((user) => {
       if (!user) {
-        next(new UnauthorizedError("Incorrect email or password."));
+        return Promise.reject(
+          new UnauthorizedError("Incorrect email or password."),
+        );
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          next(new UnauthorizedError("Incorrect email or password."));
+          return Promise.reject(
+            new UnauthorizedError("Incorrect email or password."),
+          );
         }
         return user;
       });
     })
     .catch((err) => {
       if (!email || !password) {
-        next(new BadRequestError("The email or password fields are missing."));
-      } else {
-        next(err);
+        return Promise.reject(
+          new BadRequestError("The email or password fields are missing."),
+        );
       }
+      return Promise.reject(err);
     });
 };
 
