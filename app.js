@@ -1,12 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { errors } = require("celebrate");
 const helmet = require("helmet");
-const mainRouter = require("./routes/index");
+const { errors } = require("celebrate");
 const centralizedError = require("./middlewares/centralizedError");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const mainRouter = require("./routes/index");
 const limiter = require("./middlewares/rateLimit");
+require("dotenv").config(); // draw from info in .env
 
 const app = express();
 
