@@ -2,9 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { errors } = require("celebrate");
+const helmet = require("helmet");
 const mainRouter = require("./routes/index");
 const centralizedError = require("./middlewares/centralizedError");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const limiter = require("./middlewares/rateLimit");
 
 const app = express();
 
@@ -19,6 +21,12 @@ mongoose
   .catch((err) => {
     console.error(`Connection to WTWR database error: ${err.message}`);
   });
+
+// DDos attacks
+app.use(limiter);
+
+// security related HTTP headers..
+app.use(helmet());
 
 // express middleware to parse request
 app.use(express.json());

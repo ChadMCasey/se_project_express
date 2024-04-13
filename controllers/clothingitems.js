@@ -31,7 +31,9 @@ const deleteItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id.toString()) {
-        next(new ForbiddenError("User unauthorized to delete this item."));
+        return next(
+          new ForbiddenError("User unauthorized to delete this item."),
+        );
       }
       return item
         .deleteOne()

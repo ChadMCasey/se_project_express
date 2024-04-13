@@ -14,3 +14,14 @@ The backend of WTWR includes Node js, Express js, and Mongodb. Using these techn
 ## A Demo Of The Site
 
 - Upon the projects completion, there will be a video demonstration featured here.
+
+## Here you can find the domain names for the app
+
+Backend:
+
+- api.wtwr.pii.at
+
+Frontend:
+
+- wtwr.pii.at
+- www.wtwr.pii.at
