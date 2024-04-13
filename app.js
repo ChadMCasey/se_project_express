@@ -29,6 +29,13 @@ app.use(cors());
 // request logger before routes
 app.use(requestLogger);
 
+// REMOVE ME!!!
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now...");
+  }, 0);
+});
+
 // route to our central router
 app.use(mainRouter);
 
