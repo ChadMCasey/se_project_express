@@ -8,7 +8,6 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const mainRouter = require("./routes/index");
 const limiter = require("./middlewares/rateLimit");
 require("dotenv").config(); // draw from info in .env
-
 const app = express();
 
 const { PORT = 3001 } = process.env;
@@ -37,13 +36,6 @@ app.use(cors());
 
 // request logger before routes
 app.use(requestLogger);
-
-// REMOVE ME!!!
-app.get("/crash-test", () => {
-  setTimeout(() => {
-    throw new Error("Server will crash now...");
-  }, 0);
-});
 
 // route to our central router
 app.use(mainRouter);
