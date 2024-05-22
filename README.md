@@ -17,6 +17,6 @@ This Project Features:
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWRzN3dubjZyaGd4ZmFoYnN6dWk4YnFsMnZrbnc4eW9ubjg4OThzeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Dla5MobtRtUAfd6qpb/giphy.gif)
 
 
-## Live Page & Backend Repoistory
-[Live Website](https://chadmcasey.github.io/se_project_react/](https://wtwr.pii.at/)
+## Live Page & Backend Repository
+[Live Website](https://wtwr.pii.at/) \
 [Backend Repository](https://github.com/ChadMCasey/se_project_express)
